@@ -1,17 +1,16 @@
 import os
 
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask
 
 load_dotenv()
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
+from .routes.main import main_bp  # noqa: E402
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
+app.register_blueprint(main_bp)
 
 if os.getenv("APP_ENV") == "development":
     from livereload import Server

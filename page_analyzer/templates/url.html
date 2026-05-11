@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Информация о сайте {{url.name}} {% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+  <h1 class="mb-3">Сайт: {{url.name}}</h1>
+
+  <table class="table table-bordered" data-test="url">
+    <tr>
+      <td> ID </td>
+      <td> {{ url.id }}</td>
+    </tr>
+    <tr class="table-active">
+      <td>Имя</td>
+      <td>{{ url.name }}</td>
+    </tr>
+    <tr>
+      <td>Дата создания</td>
+      <td>{{ url.created_at }}</td>
+    </tr>
+  </table>
+
+  <section>
+    <h2 class="mt-5 mb-3">Проверки</h2>
+    <button class="btn btn-primary">Запустить проверку</button>
+
+    <div class="table-responsive">
+      <table class="table table-bordered mt-3">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Код ответа</th>
+            <th>h1</th>
+            <th>title</th>
+            <th>description</th>
+            <th>Дата создания</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}
