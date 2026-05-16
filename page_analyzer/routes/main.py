@@ -83,8 +83,7 @@ def add_check_for_url(id):
         check_data = {**result, "url_id": id}
         CheckModel.save_check(check_data)
         flash("Страница успешно проверена", "success")
-    except Exception as e:
-        flash(e)
+    except Exception:
         flash("Произошла ошибка при проверке", "error")
 
     try:
