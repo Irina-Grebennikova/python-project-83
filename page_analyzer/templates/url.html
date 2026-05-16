@@ -44,9 +44,9 @@
           <tr>
             <td>{{ check.id }}</td>
             <td>{{ check.status_code or "" }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ (check.h1 or "")|truncate(200) }}</td>
+            <td>{{ (check.title or "")|truncate(200) }}</td>
+            <td>{{ (check.description or "")|truncate(200) }}</td>
             <td class="text-nowrap">{{ check.created_at.strftime("%Y-%m-%d") }}</td>
           </tr>
           {% endfor %}

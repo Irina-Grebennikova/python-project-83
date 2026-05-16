@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS url_checks (
   url_id INT REFERENCES urls(id) NOT NULL,
   status_code INT,
   h1 TEXT,
-  title VARCHAR(255),
+  title TEXT,
   description TEXT,
   created_at TIMESTAMP NOT NULL
 );
