@@ -10,6 +10,7 @@ from flask import (
 
 from ..models.check_model import CheckModel
 from ..models.url_model import URLModel
+from ..utils.check_site import check_site
 from ..utils.normalize_url import normalize_url
 from ..utils.validators import validate_url
 
@@ -23,17 +24,15 @@ def index():
 
 @main_bp.get("/urls")
 def get_urls():
-    urls_data = []
     try:
         urls = URLModel.get_urls()
-        for url in urls:
-            last_check = CheckModel.get_last_check(url["id"])
-            urls_data.append({**url, "last_check": last_check["created_at"] if last_check else ""})
+        urls_data = [{**url, "last_check": CheckModel.get_last_check(url["id"])} for url in urls]
     except Exception:
         flash(
             "Произошла ошибка при получении списка сайтов. Попробуйте перезагрузить страницу",
             "error",
         )
+        urls_data = []
     return render_template("urls.html", urls=urls_data)
 
 
@@ -80,11 +79,9 @@ def get_url(id):
 def add_check_for_url(id):
     try:
         url = URLModel.get_url(id)
-    except Exception:
-        url = ""
-
-    try:
-        CheckModel.save_check(id)
+        result = check_site(url["name"])
+        check_data = {**result, "url_id": id}
+        CheckModel.save_check(check_data)
         flash("Страница успешно проверена", "success")
     except Exception:
         flash("Произошла ошибка при проверке", "error")

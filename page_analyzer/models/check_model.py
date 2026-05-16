@@ -22,12 +22,16 @@ class CheckModel:
             return cur.fetchone()
 
     @staticmethod
-    def save_check(url_id):
+    def save_check(data):
         with get_cursor() as cur:
             cur.execute(
-                "INSERT INTO url_checks (url_id, created_at) VALUES (%s, %s) RETURNING id",
+                """
+                    INSERT INTO url_checks (url_id, status_code, created_at) 
+                    VALUES (%s, %s, %s) RETURNING id
+                """,
                 (
-                    url_id,
+                    data["url_id"],
+                    data["status_code"],
                     datetime.now(),
                 ),
             )

@@ -16,7 +16,10 @@
       <a class="navbar-brand" href="{{ url_for('main.index') }}">Анализатор страниц</a>
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('main.get_urls') }}">Сайты</a>
+          <a class="nav-link {% if request.endpoint == 'main.get_urls' %}active{% endif %}"
+            href="{{ url_for('main.get_urls') }}">
+            Сайты
+          </a>
         </li>
       </ul>
     </div>
