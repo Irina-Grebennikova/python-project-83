@@ -8,6 +8,7 @@ from flask import (
     url_for,
 )
 
+from ..models.check_model import CheckModel
 from ..models.url_model import URLModel
 from ..utils.normalize_url import normalize_url
 from ..utils.validators import validate_url
@@ -22,15 +23,18 @@ def index():
 
 @main_bp.get("/urls")
 def get_urls():
+    urls_data = []
     try:
         urls = URLModel.get_urls()
+        for url in urls:
+            last_check = CheckModel.get_last_check(url["id"])
+            urls_data.append({**url, "last_check": last_check["created_at"] if last_check else ""})
     except Exception:
         flash(
             "Произошла ошибка при получении списка сайтов. Попробуйте перезагрузить страницу",
             "error",
         )
-        urls = []
-    return render_template("urls.html", urls=urls)
+    return render_template("urls.html", urls=urls_data)
 
 
 @main_bp.post("/urls")
@@ -55,13 +59,39 @@ def add_url():
         return render_template("index.html", url=url)
 
 
-@main_bp.route("/urls/<id>")
+@main_bp.route("/urls/<int:id>")
 def get_url(id):
     try:
         url = URLModel.get_url(id)
-        url["created_at"] = url["created_at"].strftime("%Y-%m-%d")
-        if url:
-            return render_template("url.html", url=url)
-        abort(404)
+        if not url:
+            abort(404)
     except Exception:
         abort(404)
+
+    try:
+        checks = CheckModel.get_checks(id)
+    except Exception:
+        flash("Произошла ошибка при загрузке результатов проверок", "error")
+        checks = []
+    return render_template("url.html", url=url, checks=checks)
+
+
+@main_bp.post("/urls/<int:id>/checks")
+def add_check_for_url(id):
+    try:
+        url = URLModel.get_url(id)
+    except Exception:
+        url = ""
+
+    try:
+        CheckModel.save_check(id)
+        flash("Страница успешно проверена", "success")
+    except Exception:
+        flash("Произошла ошибка при проверке", "error")
+
+    try:
+        checks = CheckModel.get_checks(id)
+    except Exception:
+        flash("Произошла ошибка при загрузке результатов проверок", "error")
+        checks = []
+    return render_template("url.html", url=url, checks=checks)
