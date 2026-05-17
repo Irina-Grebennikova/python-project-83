@@ -17,7 +17,7 @@ from ..utils.validators import validate_url
 main_bp = Blueprint("main", __name__)
 
 
-@main_bp.route("/")
+@main_bp.get("/")
 def index():
     return render_template("index.html")
 
@@ -48,17 +48,18 @@ def add_url():
     try:
         existing_url = URLModel.find_url_by_name(normalized)
         if existing_url:
-            id = existing_url["id"]
+            url_id = existing_url["id"]
+            flash("Страница уже существует", "info")
         else:
-            id = URLModel.save_url(normalized)
+            url_id = URLModel.save_url(normalized)
             flash("Страница успешно добавлена", "success")
-        return redirect(url_for("main.get_url", id=id))
+        return redirect(url_for("main.get_url", id=url_id))
     except Exception:
         flash("Ошибка добавления страницы", "error")
         return render_template("index.html", url=url)
 
 
-@main_bp.route("/urls/<int:id>")
+@main_bp.get("/urls/<int:id>")
 def get_url(id):
     try:
         url = URLModel.get_url(id)

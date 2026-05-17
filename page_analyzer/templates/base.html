@@ -27,7 +27,7 @@
 
   {% for category, message in get_flashed_messages(True) %}
   <div
-    class="alert alert-{% if category == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show rounded-0 m-0"
+    class="alert alert-{% if category == 'error' %}danger{% elif category == 'success' %}success{% else %}info{% endif %} alert-dismissible fade show rounded-0 m-0"
     role="alert">
     {{ message }}
     <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
