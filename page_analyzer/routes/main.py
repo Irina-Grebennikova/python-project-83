@@ -87,9 +87,4 @@ def add_check_for_url(id):
     except Exception:
         flash("Произошла ошибка при проверке", "error")
 
-    try:
-        checks = CheckModel.get_checks(id)
-    except Exception:
-        flash("Произошла ошибка при загрузке результатов проверок", "error")
-        checks = []
-    return render_template("url.html", url=url, checks=checks)
+    return redirect(url_for("main.get_url", id=id))
