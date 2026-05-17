@@ -26,7 +26,9 @@ class URLModel:
     def save_url(url):
         with get_cursor() as cur:
             cur.execute(
-                "INSERT INTO urls (name, created_at) VALUES (%s, %s) RETURNING id",
+                """INSERT INTO urls (name, created_at)
+                VALUES (%s, %s)
+                RETURNING id;""",
                 (
                     url,
                     datetime.now(),

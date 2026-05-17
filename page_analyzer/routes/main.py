@@ -26,10 +26,13 @@ def index():
 def get_urls():
     try:
         urls = URLModel.get_urls()
-        urls_data = [{**url, "last_check": CheckModel.get_last_check(url["id"])} for url in urls]
+        urls_data = [
+            {**url, "last_check": CheckModel.get_last_check(url["id"])}
+            for url in urls
+        ]
     except Exception:
         flash(
-            "Произошла ошибка при получении списка сайтов. Попробуйте перезагрузить страницу",
+            "Произошла ошибка при получении списка сайтов.",
             "error",
         )
         urls_data = []

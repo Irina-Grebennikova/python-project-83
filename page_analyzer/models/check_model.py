@@ -8,7 +8,10 @@ class CheckModel:
     def get_checks(url_id):
         with get_cursor() as cur:
             cur.execute(
-                "SELECT * FROM url_checks WHERE url_id = %s ORDER BY created_at DESC;", (url_id,)
+                """SELECT * FROM url_checks
+                WHERE url_id = %s 
+                ORDER BY created_at DESC;""",
+                (url_id,),
             )
             return cur.fetchall()
 
@@ -16,7 +19,9 @@ class CheckModel:
     def get_last_check(url_id):
         with get_cursor() as cur:
             cur.execute(
-                "SELECT * FROM url_checks WHERE url_id = %s ORDER BY created_at DESC LIMIT 1;",
+                """SELECT * FROM url_checks
+                WHERE url_id = %s
+                ORDER BY created_at DESC LIMIT 1;""",
                 (url_id,),
             )
             return cur.fetchone()
@@ -25,10 +30,9 @@ class CheckModel:
     def save_check(data):
         with get_cursor() as cur:
             cur.execute(
-                """
-                    INSERT INTO url_checks (url_id, status_code, h1, title, description, created_at)
-                    VALUES (%s, %s, %s, %s, %s, %s) RETURNING id
-                """,
+                """INSERT INTO url_checks
+                    (url_id, status_code, h1, title, description, created_at)
+                    VALUES (%s, %s, %s, %s, %s, %s) RETURNING id""",
                 (
                     data["url_id"],
                     data["status_code"],
