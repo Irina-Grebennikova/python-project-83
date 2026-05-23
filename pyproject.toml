@@ -19,3 +19,6 @@ dev = [
     "livereload>=2.7.1",
     "ruff>=0.15.12",
 ]
+
+[tool.vercel]
+entrypoint = "page_analyzer.app:app"
